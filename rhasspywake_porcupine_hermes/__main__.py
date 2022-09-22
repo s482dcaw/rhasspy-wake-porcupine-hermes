@@ -25,6 +25,12 @@ def main():
     """Main method."""
     parser = argparse.ArgumentParser(prog="rhasspy-wake-porcupine-hermes")
     parser.add_argument(
+        "--access-key",
+        required=True,
+        action="append",
+        help="The Access Key generated in Porcupine console",
+    )
+    parser.add_argument(
         "--keyword",
         required=True,
         action="append",
@@ -124,10 +130,11 @@ def main():
             _LOGGER.warning("Failed to resolve keyword: %s", keyword)
 
     _LOGGER.debug(
-        "Loading porcupine (kw=%s, kwdirs=%s, sensitivity=%s)",
+        "Loading porcupine (kw=%s, kwdirs=%s, sensitivity=%s, access_key=%s)",
         args.keyword,
         [str(d) for d in args.keyword_dir],
         sensitivities,
+        args.access_key,
     )
 
     keyword_names = [
@@ -140,7 +147,7 @@ def main():
     if args.stdin_audio:
         # Read WAV from stdin, detect, and exit
         client = None
-        hermes = WakeHermesMqtt(client, args.keyword, keyword_names, sensitivities)
+        hermes = WakeHermesMqtt(client, args.access_key, args.keyword, keyword_names, sensitivities)
 
         if os.isatty(sys.stdin.fileno()):
             print("Reading WAV data from stdin...", file=sys.stderr)
@@ -164,6 +171,7 @@ def main():
     client = mqtt.Client()
     hermes = WakeHermesMqtt(
         client,
+        args.access_key,
         args.keyword,
         keyword_names,
         sensitivities,

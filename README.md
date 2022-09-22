@@ -30,6 +30,7 @@ $ bin/rhasspy-wake-porcupine-hermes <ARGS>
 
 ```
 usage: rhasspy-wake-porcupine-hermes [-h] --keyword KEYWORD
+                                     [--access-key ACCESS_KEY]
                                      [--keyword-dir KEYWORD_DIR]
                                      [--library LIBRARY] [--model MODEL]
                                      [--wakeword-id WAKEWORD_ID]
@@ -52,6 +53,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --keyword KEYWORD     Path(s) to one or more Porcupine keyword file(s)
                         (.ppn)
+  --access-key ACCESS_KEY
+                        The Access Key generated in Porcupine console
   --keyword-dir KEYWORD_DIR
                         Path to directory with keyword files
   --library LIBRARY     Path to Porcupine shared library (.so)

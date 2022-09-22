@@ -72,6 +72,7 @@ class WakeHermesMqtt(HermesClient):
     def __init__(
         self,
         client,
+        access_key: str,
         model_ids: typing.List[str],
         wakeword_ids: typing.List[str],
         sensitivities: typing.List[float],
@@ -97,6 +98,7 @@ class WakeHermesMqtt(HermesClient):
 
         self.subscribe(AudioFrame, HotwordToggleOn, HotwordToggleOff, GetHotwords)
 
+        self.access_key = access_key
         self.wakeword_ids = wakeword_ids
         self.model_ids = model_ids
         self.sensitivities = sensitivities
@@ -248,8 +250,9 @@ class WakeHermesMqtt(HermesClient):
         """Handle WAV audio chunks."""
         try:
             if site_info.porcupine is None:
-                _LOGGER.debug("Loading porcupine for %s", site_info.site_id)
+                _LOGGER.debug("Loading porcupine for %s with access key %s", site_info.site_id, self.access_key)
                 site_info.porcupine = pvporcupine.create(
+                    access_key=self.access_key[0],
                     keyword_paths=[str(kw) for kw in self.model_ids],
                     sensitivities=self.sensitivities,
                 )
